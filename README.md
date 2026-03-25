@@ -15,3 +15,12 @@ This repository has been reset to a clean starting point and will be rebuilt in 
 ## Status
 
 Fresh repository baseline on `main`.
+
+## Documentation
+
+- `docs/ARCHITECTURE.md`
+- `docs/ROADMAP.md`
+- `docs/DEPLOYMENT.md`
+- `docs/API_OVERVIEW.md`
+- `docs/REPOSITORY_RULES.md`
+- `docs/SETUP_GUIDE.md`

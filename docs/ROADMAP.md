@@ -1,47 +1,79 @@
-# Roadmap
+﻿# Roadmap
+
+This file is generated from project-status.json using scripts/update-roadmap.ps1.
+
+## Summary
+
+- `Phase 1`: completed
+- `Phase 2`: pending
+- `Phase 3`: pending
+- `Phase 4`: pending
+- `Phase 5`: pending
+- `Phase 6`: pending
+- `Phase 7`: pending
+- `Phase 8`: pending
 
 ## Phase 1
 
-- repository reset and clean baseline
-- README and gitignore
-- repository rules and contribution templates
+Status: `completed`
+
+- [x] repository reset and clean baseline
+- [x] README and gitignore
+- [x] repository rules and contribution templates
+- [x] architecture and planning docs
+- [x] setup and configuration baseline
 
 ## Phase 2
 
-- crawler MVP
-- metadata model
-- filesystem traversal
+Status: `pending`
+
+- [ ] crawler MVP
+- [ ] metadata model
+- [ ] filesystem traversal
 
 ## Phase 3
 
-- indexing and storage layer
-- crawl job tracking
-- machine registration
+Status: `pending`
+
+- [ ] indexing and storage layer
+- [ ] crawl job tracking
+- [ ] machine registration
 
 ## Phase 4
 
-- backend APIs
-- health endpoints
-- search endpoints
+Status: `pending`
+
+- [ ] backend APIs
+- [ ] health endpoints
+- [ ] search endpoints
 
 ## Phase 5
 
-- frontend search UI
-- result views
-- crawl status screens
+Status: `pending`
+
+- [ ] frontend search UI
+- [ ] result views
+- [ ] crawl status screens
 
 ## Phase 6
 
-- LM Studio integration
-- semantic query flow
+Status: `pending`
+
+- [ ] LM Studio integration
+- [ ] semantic query flow
 
 ## Phase 7
 
-- embeddings and vector search
-- semantic ranking improvements
+Status: `pending`
+
+- [ ] embeddings and vector search
+- [ ] semantic ranking improvements
 
 ## Phase 8
 
-- performance tuning
-- deployment hardening
-- observability
+Status: `pending`
+
+- [ ] performance tuning
+- [ ] deployment hardening
+- [ ] observability
+
