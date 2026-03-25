@@ -28,7 +28,7 @@ Fresh repository baseline on `main`.
 ## Repository Structure
 
 ```text
-credb/
+./
 |- backend/
 |- crawler-agent/
 |- frontend/
