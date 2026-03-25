@@ -1,0 +1,35 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Java / Gradle / Maven
+target/
+build/
+out/
+.gradle/
+*.class
+
+# Node / frontend
+node_modules/
+dist/
+coverage/
+.vite/
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Local runtime data
+data/
+tmp/
+cache/
