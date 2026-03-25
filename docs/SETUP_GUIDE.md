@@ -9,6 +9,8 @@ This repository is currently in baseline documentation stage. Exact build and ru
 - `frontend/`
 - `docs/`
 
+These directories now exist as the initial project scaffold.
+
 ## Configuration Baseline
 
 Use `.env.example` as the initial reference for future environment configuration.
