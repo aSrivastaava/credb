@@ -19,6 +19,7 @@ public final class CrawlerAgentService {
         System.out.println("Starting points: " + config.resolvedScanRoots());
         System.out.println("Worker threads: " + config.workerThreads());
         System.out.println("Verbose mode: " + config.verbose());
+        System.out.println("Include hidden: " + config.includeHidden());
         System.out.println("Output limit: " + (config.outputLimit() == null ? "none" : config.outputLimit()));
 
         CrawlSummary summary = traversalService.crawl(config);
@@ -26,7 +27,8 @@ public final class CrawlerAgentService {
         System.out.println("Scanned roots: " + summary.scannedRoots());
         System.out.println("Directories: " + summary.directories());
         System.out.println("Files: " + summary.files());
-        System.out.println("Hidden entries: " + summary.hiddenEntries());
+        System.out.println("Hidden entries detected: " + summary.hiddenEntries());
+        System.out.println("Hidden entries skipped: " + summary.skippedHiddenEntries());
         System.out.println("Protected or inaccessible paths: " + summary.inaccessiblePaths());
         System.out.println("Total discovered entries: " + summary.records().size());
 

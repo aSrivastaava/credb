@@ -25,7 +25,7 @@ public final class FileSystemTraversalService {
             }
 
             try {
-                Files.walkFileTree(root, new CrawlVisitor(config.machineId(), records, stats));
+                Files.walkFileTree(root, new CrawlVisitor(config.machineId(), config.includeHidden(), records, stats));
                 stats.scannedRoots++;
             } catch (IOException exception) {
                 stats.inaccessiblePaths++;
@@ -36,6 +36,7 @@ public final class FileSystemTraversalService {
                 stats.scannedRoots,
                 stats.directories,
                 stats.files,
+                stats.skippedHiddenEntries,
                 stats.hiddenEntries,
                 stats.inaccessiblePaths,
                 records
@@ -44,26 +45,46 @@ public final class FileSystemTraversalService {
 
     private static final class CrawlVisitor extends SimpleFileVisitor<Path> {
         private final String machineId;
+        private final boolean includeHidden;
         private final List<FileRecord> records;
         private final TraversalStats stats;
 
-        private CrawlVisitor(String machineId, List<FileRecord> records, TraversalStats stats) {
+        private CrawlVisitor(String machineId, boolean includeHidden, List<FileRecord> records, TraversalStats stats) {
             this.machineId = machineId;
+            this.includeHidden = includeHidden;
             this.records = records;
             this.stats = stats;
         }
 
         @Override
         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+            boolean hidden = isHidden(dir);
+            if (hidden) {
+                stats.hiddenEntries++;
+                if (!configIncludeHidden()) {
+                    stats.skippedHiddenEntries++;
+                    return FileVisitResult.SKIP_SUBTREE;
+                }
+            }
+
             stats.directories++;
-            records.add(toRecord(dir, attrs, true, "accessible"));
+            records.add(toRecord(dir, attrs, true, "accessible", hidden));
             return FileVisitResult.CONTINUE;
         }
 
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+            boolean hidden = isHidden(file);
+            if (hidden) {
+                stats.hiddenEntries++;
+                if (!configIncludeHidden()) {
+                    stats.skippedHiddenEntries++;
+                    return FileVisitResult.CONTINUE;
+                }
+            }
+
             stats.files++;
-            records.add(toRecord(file, attrs, false, "accessible"));
+            records.add(toRecord(file, attrs, false, "accessible", hidden));
             return FileVisitResult.CONTINUE;
         }
 
@@ -83,12 +104,7 @@ public final class FileSystemTraversalService {
             return FileVisitResult.CONTINUE;
         }
 
-        private FileRecord toRecord(Path path, BasicFileAttributes attrs, boolean directory, String accessStatus) {
-            boolean hidden = isHidden(path);
-            if (hidden) {
-                stats.hiddenEntries++;
-            }
-
+        private FileRecord toRecord(Path path, BasicFileAttributes attrs, boolean directory, String accessStatus, boolean hidden) {
             return new FileRecord(
                     machineId,
                     path.toAbsolutePath().toString(),
@@ -99,6 +115,10 @@ public final class FileSystemTraversalService {
                     attrs.lastModifiedTime().toInstant(),
                     accessStatus
             );
+        }
+
+        private boolean configIncludeHidden() {
+            return includeHidden;
         }
 
         private boolean isHidden(Path path) {
@@ -114,6 +134,7 @@ public final class FileSystemTraversalService {
         private int scannedRoots;
         private int directories;
         private int files;
+        private int skippedHiddenEntries;
         private int hiddenEntries;
         private int inaccessiblePaths;
     }

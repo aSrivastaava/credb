@@ -10,7 +10,8 @@ public record CrawlerConfig(
         String scanRoots,
         int workerThreads,
         boolean verbose,
-        Integer outputLimit
+        Integer outputLimit,
+        boolean includeHidden
 ) {
     public static CrawlerConfig fromEnvironment(String[] args) {
         String machineId = getEnv("CREDB_CRAWLER_MACHINE_ID", "local-dev-machine");
@@ -18,6 +19,7 @@ public record CrawlerConfig(
         int workerThreads = Integer.parseInt(getEnv("CREDB_CRAWLER_WORKER_THREADS", "4"));
         boolean verbose = false;
         Integer outputLimit = null;
+        boolean includeHidden = false;
 
         for (int index = 0; index < args.length; index++) {
             String arg = args[index];
@@ -25,6 +27,7 @@ public record CrawlerConfig(
 
             switch (normalized) {
                 case "--verbose", "-v" -> verbose = true;
+                case "--include-hidden", "--hidden" -> includeHidden = true;
                 case "--root", "--start", "-s" -> {
                     if (index + 1 >= args.length) {
                         throw new IllegalArgumentException("Missing value for " + arg);
@@ -42,6 +45,8 @@ public record CrawlerConfig(
                         scanRoots = arg.substring(arg.indexOf('=') + 1);
                     } else if (normalized.startsWith("--limit=")) {
                         outputLimit = Integer.parseInt(arg.substring(arg.indexOf('=') + 1));
+                    } else if (normalized.equals("--include-hidden=true")) {
+                        includeHidden = true;
                     } else {
                         throw new IllegalArgumentException("Unknown argument: " + arg);
                     }
@@ -49,7 +54,7 @@ public record CrawlerConfig(
             }
         }
 
-        return new CrawlerConfig(machineId, scanRoots, workerThreads, verbose, outputLimit);
+        return new CrawlerConfig(machineId, scanRoots, workerThreads, verbose, outputLimit, includeHidden);
     }
 
     public List<Path> resolvedScanRoots() {
