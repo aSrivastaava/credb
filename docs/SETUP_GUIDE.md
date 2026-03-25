@@ -25,6 +25,22 @@ Current planned variables:
 - `CREDB_CRAWLER_SCAN_ROOTS`
 - `CREDB_VECTOR_ENABLED`
 
+## Roadmap Automation
+
+The roadmap is generated from `project-status.json`.
+
+Update the repository roadmap:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\update-roadmap.ps1
+```
+
+Update the repository roadmap and a cloned wiki `Roadmap.md` together:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\update-roadmap.ps1 -WikiRoadmapFile .\path\to\wiki\Roadmap.md
+```
+
 ## Development Order
 
 1. scaffold project structure
