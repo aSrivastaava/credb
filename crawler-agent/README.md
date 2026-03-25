@@ -30,4 +30,7 @@ The crawler module now has:
 - an application entry point
 - an environment-backed config model
 - a placeholder crawl job model
-- a service entry point for future traversal logic
+- a service entry point for traversal logic
+- recursive filesystem traversal using Java NIO
+- basic file and directory metadata capture
+- crawl summary output to the console
