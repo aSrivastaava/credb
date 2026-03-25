@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ ! -f "project-status.json" ]; then
+  exit 0
+fi
+
+powershell -ExecutionPolicy Bypass -File .\scripts\update-roadmap.ps1 > /dev/null
+git add docs/ROADMAP.md
