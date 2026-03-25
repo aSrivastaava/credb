@@ -1,0 +1,84 @@
+{
+  "phases": [
+    {
+      "id": 1,
+      "name": "Phase 1",
+      "status": "completed",
+      "tasks": [
+        { "text": "repository reset and clean baseline", "done": true },
+        { "text": "README and gitignore", "done": true },
+        { "text": "repository rules and contribution templates", "done": true },
+        { "text": "architecture and planning docs", "done": true },
+        { "text": "setup and configuration baseline", "done": true }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Phase 2",
+      "status": "pending",
+      "tasks": [
+        { "text": "crawler MVP", "done": false },
+        { "text": "metadata model", "done": false },
+        { "text": "filesystem traversal", "done": false }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Phase 3",
+      "status": "pending",
+      "tasks": [
+        { "text": "indexing and storage layer", "done": false },
+        { "text": "crawl job tracking", "done": false },
+        { "text": "machine registration", "done": false }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Phase 4",
+      "status": "pending",
+      "tasks": [
+        { "text": "backend APIs", "done": false },
+        { "text": "health endpoints", "done": false },
+        { "text": "search endpoints", "done": false }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Phase 5",
+      "status": "pending",
+      "tasks": [
+        { "text": "frontend search UI", "done": false },
+        { "text": "result views", "done": false },
+        { "text": "crawl status screens", "done": false }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Phase 6",
+      "status": "pending",
+      "tasks": [
+        { "text": "LM Studio integration", "done": false },
+        { "text": "semantic query flow", "done": false }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Phase 7",
+      "status": "pending",
+      "tasks": [
+        { "text": "embeddings and vector search", "done": false },
+        { "text": "semantic ranking improvements", "done": false }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Phase 8",
+      "status": "pending",
+      "tasks": [
+        { "text": "performance tuning", "done": false },
+        { "text": "deployment hardening", "done": false },
+        { "text": "observability", "done": false }
+      ]
+    }
+  ]
+}
