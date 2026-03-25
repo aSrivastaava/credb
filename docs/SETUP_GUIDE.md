@@ -29,55 +29,41 @@ Current planned variables:
 
 The roadmap is generated from `project-status.json`.
 
-Update the repository roadmap:
+Update the repository roadmap locally:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\update-roadmap.ps1
 ```
 
-Update the repository roadmap and a cloned wiki `Roadmap.md` together:
+Update the repository roadmap and a cloned wiki `Roadmap.md` together if you want to test locally:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\update-roadmap.ps1 -WikiRoadmapFile .\path\to\wiki\Roadmap.md
 ```
 
-Use the wiki sync helper to clone or pull the wiki repo, regenerate `Roadmap.md`, and commit it locally:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\sync-wiki-roadmap.ps1
-```
-
-Add `-Push` to also push the wiki update:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\sync-wiki-roadmap.ps1 -Push
-```
-
 ## Automation Options
 
-You do not have to run the roadmap script by hand every time, but some trigger still has to invoke it.
+The primary automation path is GitHub Actions.
 
 Practical options:
 
 - run the PowerShell script manually when phase status changes
-- use a local Git hook such as `post-commit` or `pre-push`
-- use a GitHub Action to regenerate the repo roadmap automatically
-
-### Local Automatic Repo Updates
-
-This repository includes a versioned Git hook setup for automatic roadmap regeneration before commits.
-
-Enable it once:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\install-git-hooks.ps1
-```
-
-After that, the pre-commit hook will regenerate `docs/ROADMAP.md` from `project-status.json` and stage it automatically.
+- use a GitHub Action to sync the wiki roadmap when `project-status.json` changes on `main`
 
 Important limitation:
 
-- the wiki is a separate Git repository, so wiki updates still need a workflow or script with permission to clone, commit, and push to the wiki repo
+- the wiki is a separate Git repository, so automation needs permission to clone, commit, and push to the wiki repo
+
+## GitHub Action
+
+The repository includes [`.github/workflows/sync-wiki-roadmap.yml`](../.github/workflows/sync-wiki-roadmap.yml) to update the wiki `Roadmap.md` automatically on pushes to `main` that modify:
+
+- `project-status.json`
+- `scripts/update-roadmap.ps1`
+
+This workflow uses `GITHUB_TOKEN` and expects the repository Actions permissions to allow content writes.
+
+The repository roadmap file should be updated in the same commit as `project-status.json`, or regenerated locally before pushing.
 
 ## Development Order
 
