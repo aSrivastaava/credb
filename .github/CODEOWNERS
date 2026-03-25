@@ -1,0 +1,21 @@
+# Default ownership
+* @aSrivastaava
+
+# Documentation
+/README.md @aSrivastaava
+/docs/ @aSrivastaava
+/CONTRIBUTING.md @aSrivastaava
+/CHANGELOG.md @aSrivastaava
+
+# Backend
+/backend/ @aSrivastaava
+
+# Crawler
+/crawler-agent/ @aSrivastaava
+
+# Frontend
+/frontend/ @aSrivastaava
+
+# Repository automation
+/.github/ @aSrivastaava
+/scripts/ @aSrivastaava
