@@ -24,3 +24,21 @@ Fresh repository baseline on `main`.
 - `docs/API_OVERVIEW.md`
 - `docs/REPOSITORY_RULES.md`
 - `docs/SETUP_GUIDE.md`
+
+## Repository Structure
+
+```text
+./
+|- backend/
+|- crawler-agent/
+|- frontend/
+|- docs/
+|- scripts/
+`- .github/
+```
+
+## Current Scaffold
+
+- `backend/` for the Spring Boot service
+- `crawler-agent/` for filesystem crawling
+- `frontend/` for the web UI
