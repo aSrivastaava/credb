@@ -6,6 +6,7 @@ public record CrawlSummary(
         int scannedRoots,
         int directories,
         int files,
+        int hiddenEntries,
         int inaccessiblePaths,
         List<FileRecord> records
 ) {

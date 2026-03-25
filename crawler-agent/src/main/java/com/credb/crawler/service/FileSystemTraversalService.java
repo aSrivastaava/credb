@@ -36,6 +36,7 @@ public final class FileSystemTraversalService {
                 stats.scannedRoots,
                 stats.directories,
                 stats.files,
+                stats.hiddenEntries,
                 stats.inaccessiblePaths,
                 records
         );
@@ -74,6 +75,7 @@ public final class FileSystemTraversalService {
                     file.toAbsolutePath().toString(),
                     file.getFileName() == null ? file.toString() : file.getFileName().toString(),
                     false,
+                    false,
                     0L,
                     null,
                     "inaccessible"
@@ -82,15 +84,29 @@ public final class FileSystemTraversalService {
         }
 
         private FileRecord toRecord(Path path, BasicFileAttributes attrs, boolean directory, String accessStatus) {
+            boolean hidden = isHidden(path);
+            if (hidden) {
+                stats.hiddenEntries++;
+            }
+
             return new FileRecord(
                     machineId,
                     path.toAbsolutePath().toString(),
                     path.getFileName() == null ? path.toString() : path.getFileName().toString(),
                     directory,
+                    hidden,
                     directory ? 0L : attrs.size(),
                     attrs.lastModifiedTime().toInstant(),
                     accessStatus
             );
+        }
+
+        private boolean isHidden(Path path) {
+            try {
+                return Files.isHidden(path);
+            } catch (IOException exception) {
+                return false;
+            }
         }
     }
 
@@ -98,6 +114,7 @@ public final class FileSystemTraversalService {
         private int scannedRoots;
         private int directories;
         private int files;
+        private int hiddenEntries;
         private int inaccessiblePaths;
     }
 }

@@ -8,7 +8,7 @@ public final class CrawlerApplication {
     }
 
     public static void main(String[] args) {
-        CrawlerConfig config = CrawlerConfig.fromEnvironment();
+        CrawlerConfig config = CrawlerConfig.fromEnvironment(args);
         CrawlerAgentService service = new CrawlerAgentService(config);
         service.start();
     }

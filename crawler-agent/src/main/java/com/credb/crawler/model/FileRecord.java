@@ -7,6 +7,7 @@ public record FileRecord(
         String fullPath,
         String fileName,
         boolean directory,
+        boolean hidden,
         long sizeBytes,
         Instant lastModifiedAt,
         String accessStatus

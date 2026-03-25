@@ -34,3 +34,14 @@ The crawler module now has:
 - recursive filesystem traversal using Java NIO
 - basic file and directory metadata capture
 - crawl summary output to the console
+
+## Runtime Options
+
+- `--verbose` or `-v`
+  - print discovered entries
+- `--limit <n>` or `-l <n>`
+  - limit printed entries in verbose mode
+- `--root <path>` or `--start <path>` or `-s <path>`
+  - override the crawl starting point for the current run
+
+Without verbose mode, the crawler prints summary counts only.
