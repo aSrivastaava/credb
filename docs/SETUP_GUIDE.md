@@ -11,6 +11,8 @@ This repository is currently in baseline documentation stage. Exact build and ru
 
 These directories now exist as the initial project scaffold.
 
+The `crawler-agent/` module now also includes a minimal Java project skeleton with a Maven build file and starter package layout.
+
 ## Configuration Baseline
 
 Use `.env.example` as the initial reference for future environment configuration.
@@ -25,6 +27,7 @@ Current planned variables:
 - `CREDB_LMSTUDIO_BASE_URL`
 - `CREDB_CRAWLER_MACHINE_ID`
 - `CREDB_CRAWLER_SCAN_ROOTS`
+- `CREDB_CRAWLER_WORKER_THREADS`
 - `CREDB_VECTOR_ENABLED`
 
 ## Roadmap Automation
