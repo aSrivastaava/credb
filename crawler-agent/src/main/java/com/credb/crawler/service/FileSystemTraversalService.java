@@ -11,12 +11,15 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public final class FileSystemTraversalService {
     public CrawlSummary crawl(CrawlerConfig config) {
         List<FileRecord> records = new ArrayList<>();
         TraversalStats stats = new TraversalStats();
+        Set<Path> configuredRoots = new HashSet<>();
 
         for (Path root : config.resolvedScanRoots()) {
             if (!Files.exists(root)) {
@@ -25,7 +28,12 @@ public final class FileSystemTraversalService {
             }
 
             try {
-                Files.walkFileTree(root, new CrawlVisitor(config.machineId(), config.includeHidden(), records, stats));
+                Path normalizedRoot = root.toAbsolutePath().normalize();
+                configuredRoots.add(normalizedRoot);
+                Files.walkFileTree(
+                        normalizedRoot,
+                        new CrawlVisitor(config.machineId(), config.includeHidden(), configuredRoots, records, stats)
+                );
                 stats.scannedRoots++;
             } catch (IOException exception) {
                 stats.inaccessiblePaths++;
@@ -46,12 +54,20 @@ public final class FileSystemTraversalService {
     private static final class CrawlVisitor extends SimpleFileVisitor<Path> {
         private final String machineId;
         private final boolean includeHidden;
+        private final Set<Path> configuredRoots;
         private final List<FileRecord> records;
         private final TraversalStats stats;
 
-        private CrawlVisitor(String machineId, boolean includeHidden, List<FileRecord> records, TraversalStats stats) {
+        private CrawlVisitor(
+                String machineId,
+                boolean includeHidden,
+                Set<Path> configuredRoots,
+                List<FileRecord> records,
+                TraversalStats stats
+        ) {
             this.machineId = machineId;
             this.includeHidden = includeHidden;
+            this.configuredRoots = configuredRoots;
             this.records = records;
             this.stats = stats;
         }
@@ -59,7 +75,7 @@ public final class FileSystemTraversalService {
         @Override
         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
             boolean hidden = isHidden(dir);
-            if (hidden) {
+            if (hidden && !isConfiguredRoot(dir)) {
                 stats.hiddenEntries++;
                 if (!configIncludeHidden()) {
                     stats.skippedHiddenEntries++;
@@ -119,6 +135,10 @@ public final class FileSystemTraversalService {
 
         private boolean configIncludeHidden() {
             return includeHidden;
+        }
+
+        private boolean isConfiguredRoot(Path path) {
+            return configuredRoots.contains(path.toAbsolutePath().normalize());
         }
 
         private boolean isHidden(Path path) {
