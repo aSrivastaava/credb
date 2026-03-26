@@ -20,6 +20,18 @@ CredB Nexus is planned as an offline-first distributed file indexing and retriev
 - `Optional LLM Layer`
   - refines or summarizes shortlisted results
 
+## Storage Evolution
+
+Near term:
+
+- crawler output may be written to temporary local JSON files for debugging or handoff
+
+Planned later stage:
+
+- central PostgreSQL hosted on the local Ubuntu server
+- pgvector enabled for semantic retrieval and RAG-oriented workflows
+- crawler agents send structured metadata into the database instead of relying on file export as the long-term contract
+
 ## Architectural Rules
 
 - crawling must stay separate from LLM execution

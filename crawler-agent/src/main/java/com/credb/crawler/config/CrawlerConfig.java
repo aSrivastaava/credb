@@ -11,7 +11,8 @@ public record CrawlerConfig(
         int workerThreads,
         boolean verbose,
         Integer outputLimit,
-        boolean includeHidden
+        boolean includeHidden,
+        String outputFile
 ) {
     public static CrawlerConfig fromEnvironment(String[] args) {
         String machineId = getEnv("CREDB_CRAWLER_MACHINE_ID", "local-dev-machine");
@@ -20,6 +21,7 @@ public record CrawlerConfig(
         boolean verbose = false;
         Integer outputLimit = null;
         boolean includeHidden = false;
+        String outputFile = null;
 
         for (int index = 0; index < args.length; index++) {
             String arg = args[index];
@@ -40,11 +42,19 @@ public record CrawlerConfig(
                     }
                     outputLimit = Integer.parseInt(args[++index]);
                 }
+                case "--output", "-o" -> {
+                    if (index + 1 >= args.length) {
+                        throw new IllegalArgumentException("Missing value for " + arg);
+                    }
+                    outputFile = args[++index];
+                }
                 default -> {
                     if (normalized.startsWith("--root=") || normalized.startsWith("--start=")) {
                         scanRoots = arg.substring(arg.indexOf('=') + 1);
                     } else if (normalized.startsWith("--limit=")) {
                         outputLimit = Integer.parseInt(arg.substring(arg.indexOf('=') + 1));
+                    } else if (normalized.startsWith("--output=")) {
+                        outputFile = arg.substring(arg.indexOf('=') + 1);
                     } else if (normalized.equals("--include-hidden=true")) {
                         includeHidden = true;
                     } else {
@@ -54,7 +64,7 @@ public record CrawlerConfig(
             }
         }
 
-        return new CrawlerConfig(machineId, scanRoots, workerThreads, verbose, outputLimit, includeHidden);
+        return new CrawlerConfig(machineId, scanRoots, workerThreads, verbose, outputLimit, includeHidden, outputFile);
     }
 
     public List<Path> resolvedScanRoots() {

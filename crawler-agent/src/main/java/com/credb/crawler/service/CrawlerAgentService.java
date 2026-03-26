@@ -4,13 +4,18 @@ import com.credb.crawler.config.CrawlerConfig;
 import com.credb.crawler.model.CrawlSummary;
 import com.credb.crawler.model.FileRecord;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 public final class CrawlerAgentService {
     private final CrawlerConfig config;
     private final FileSystemTraversalService traversalService;
+    private final CrawlExportService exportService;
 
     public CrawlerAgentService(CrawlerConfig config) {
         this.config = config;
         this.traversalService = new FileSystemTraversalService();
+        this.exportService = new CrawlExportService();
     }
 
     public void start() {
@@ -21,6 +26,7 @@ public final class CrawlerAgentService {
         System.out.println("Verbose mode: " + config.verbose());
         System.out.println("Include hidden: " + config.includeHidden());
         System.out.println("Output limit: " + (config.outputLimit() == null ? "none" : config.outputLimit()));
+        System.out.println("Output file: " + (config.outputFile() == null ? "none" : config.outputFile()));
 
         CrawlSummary summary = traversalService.crawl(config);
 
@@ -39,6 +45,10 @@ public final class CrawlerAgentService {
                     .limit(config.outputLimit() == null ? Long.MAX_VALUE : config.outputLimit())
                     .forEach(this::printRecord);
         }
+
+        if (config.outputFile() != null && !config.outputFile().isBlank()) {
+            exportSummary(summary, Path.of(config.outputFile()));
+        }
     }
 
     private void printRecord(FileRecord record) {
@@ -49,5 +59,14 @@ public final class CrawlerAgentService {
                 record.accessStatus(),
                 record.hidden() ? ", hidden" : ""
         );
+    }
+
+    private void exportSummary(CrawlSummary summary, Path outputPath) {
+        try {
+            exportService.exportToJson(outputPath, summary);
+            System.out.println("Exported crawl summary to: " + outputPath.toAbsolutePath());
+        } catch (IOException exception) {
+            System.err.println("Failed to export crawl summary: " + exception.getMessage());
+        }
     }
 }

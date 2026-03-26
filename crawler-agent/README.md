@@ -45,8 +45,25 @@ The crawler module now has:
   - override the crawl starting point for the current run
 - `--include-hidden` or `--hidden`
   - include hidden files and folders in traversal output
+- `--output <file>` or `-o <file>`
+  - export crawl summary and records to a JSON file
+
+Recommended temporary output path:
+
+- `data/crawl-output.json`
 
 Without verbose mode, the crawler prints summary counts only.
 By default, hidden files and folders are detected and counted but skipped during traversal.
 Configured starting roots are still entered even if the operating system marks them hidden or system-protected.
 The configured starting root itself is not counted as a visible folder total.
+
+## Storage Direction
+
+Current stage:
+
+- export to a temporary local JSON file for inspection and handoff
+
+Planned next stage:
+
+- persist crawler output into PostgreSQL on the local Ubuntu server
+- add pgvector later for semantic retrieval and RAG workflows
