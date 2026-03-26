@@ -30,4 +30,23 @@ The crawler module now has:
 - an application entry point
 - an environment-backed config model
 - a placeholder crawl job model
-- a service entry point for future traversal logic
+- a service entry point for traversal logic
+- recursive filesystem traversal using Java NIO
+- basic file and directory metadata capture
+- crawl summary output to the console
+
+## Runtime Options
+
+- `--verbose` or `-v`
+  - print discovered entries
+- `--limit <n>` or `-l <n>`
+  - limit printed entries in verbose mode
+- `--root <path>` or `--start <path>` or `-s <path>`
+  - override the crawl starting point for the current run
+- `--include-hidden` or `--hidden`
+  - include hidden files and folders in traversal output
+
+Without verbose mode, the crawler prints summary counts only.
+By default, hidden files and folders are detected and counted but skipped during traversal.
+Configured starting roots are still entered even if the operating system marks them hidden or system-protected.
+The configured starting root itself is not counted as a visible folder total.
