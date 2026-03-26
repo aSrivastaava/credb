@@ -42,10 +42,11 @@ public final class FileSystemTraversalService {
 
         return new CrawlSummary(
                 stats.scannedRoots,
-                stats.directories,
-                stats.files,
+                stats.visibleDirectories,
+                stats.visibleFiles,
+                stats.hiddenDirectories,
+                stats.hiddenFiles,
                 stats.skippedHiddenEntries,
-                stats.hiddenEntries,
                 stats.inaccessiblePaths,
                 records
         );
@@ -74,16 +75,20 @@ public final class FileSystemTraversalService {
 
         @Override
         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+            boolean configuredRoot = isConfiguredRoot(dir);
             boolean hidden = isHidden(dir);
-            if (hidden && !isConfiguredRoot(dir)) {
-                stats.hiddenEntries++;
-                if (!configIncludeHidden()) {
-                    stats.skippedHiddenEntries++;
-                    return FileVisitResult.SKIP_SUBTREE;
+            if (!configuredRoot) {
+                if (hidden) {
+                    stats.hiddenDirectories++;
+                    if (!configIncludeHidden()) {
+                        stats.skippedHiddenEntries++;
+                        return FileVisitResult.SKIP_SUBTREE;
+                    }
+                } else {
+                    stats.visibleDirectories++;
                 }
             }
 
-            stats.directories++;
             records.add(toRecord(dir, attrs, true, "accessible", hidden));
             return FileVisitResult.CONTINUE;
         }
@@ -92,14 +97,14 @@ public final class FileSystemTraversalService {
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             boolean hidden = isHidden(file);
             if (hidden) {
-                stats.hiddenEntries++;
+                stats.hiddenFiles++;
                 if (!configIncludeHidden()) {
                     stats.skippedHiddenEntries++;
                     return FileVisitResult.CONTINUE;
                 }
+            } else {
+                stats.visibleFiles++;
             }
-
-            stats.files++;
             records.add(toRecord(file, attrs, false, "accessible", hidden));
             return FileVisitResult.CONTINUE;
         }
@@ -152,10 +157,11 @@ public final class FileSystemTraversalService {
 
     private static final class TraversalStats {
         private int scannedRoots;
-        private int directories;
-        private int files;
+        private int visibleDirectories;
+        private int visibleFiles;
+        private int hiddenDirectories;
+        private int hiddenFiles;
         private int skippedHiddenEntries;
-        private int hiddenEntries;
         private int inaccessiblePaths;
     }
 }

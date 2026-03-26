@@ -4,10 +4,11 @@ import java.util.List;
 
 public record CrawlSummary(
         int scannedRoots,
-        int directories,
-        int files,
+        int visibleDirectories,
+        int visibleFiles,
+        int hiddenDirectories,
+        int hiddenFiles,
         int skippedHiddenEntries,
-        int hiddenEntries,
         int inaccessiblePaths,
         List<FileRecord> records
 ) {

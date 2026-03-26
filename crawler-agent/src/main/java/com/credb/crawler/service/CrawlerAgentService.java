@@ -25,9 +25,10 @@ public final class CrawlerAgentService {
         CrawlSummary summary = traversalService.crawl(config);
 
         System.out.println("Scanned roots: " + summary.scannedRoots());
-        System.out.println("Directories: " + summary.directories());
-        System.out.println("Files: " + summary.files());
-        System.out.println("Hidden entries detected: " + summary.hiddenEntries());
+        System.out.println("Visible directories: " + summary.visibleDirectories());
+        System.out.println("Visible files: " + summary.visibleFiles());
+        System.out.println("Hidden directories detected: " + summary.hiddenDirectories());
+        System.out.println("Hidden files detected: " + summary.hiddenFiles());
         System.out.println("Hidden entries skipped: " + summary.skippedHiddenEntries());
         System.out.println("Protected or inaccessible paths: " + summary.inaccessiblePaths());
         System.out.println("Total discovered entries: " + summary.records().size());

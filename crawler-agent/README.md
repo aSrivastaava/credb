@@ -49,3 +49,4 @@ The crawler module now has:
 Without verbose mode, the crawler prints summary counts only.
 By default, hidden files and folders are detected and counted but skipped during traversal.
 Configured starting roots are still entered even if the operating system marks them hidden or system-protected.
+The configured starting root itself is not counted as a visible folder total.
