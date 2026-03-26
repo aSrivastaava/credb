@@ -34,6 +34,7 @@ The crawler module now has:
 - recursive filesystem traversal using Java NIO
 - basic file and directory metadata capture
 - crawl summary output to the console
+- machine identity using MAC-based `machineId` and computer name
 
 ## Runtime Options
 

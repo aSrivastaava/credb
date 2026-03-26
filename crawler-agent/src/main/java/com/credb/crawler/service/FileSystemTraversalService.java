@@ -32,7 +32,14 @@ public final class FileSystemTraversalService {
                 configuredRoots.add(normalizedRoot);
                 Files.walkFileTree(
                         normalizedRoot,
-                        new CrawlVisitor(config.machineId(), config.includeHidden(), configuredRoots, records, stats)
+                        new CrawlVisitor(
+                                config.machineId(),
+                                config.machineName(),
+                                config.includeHidden(),
+                                configuredRoots,
+                                records,
+                                stats
+                        )
                 );
                 stats.scannedRoots++;
             } catch (IOException exception) {
@@ -54,6 +61,7 @@ public final class FileSystemTraversalService {
 
     private static final class CrawlVisitor extends SimpleFileVisitor<Path> {
         private final String machineId;
+        private final String machineName;
         private final boolean includeHidden;
         private final Set<Path> configuredRoots;
         private final List<FileRecord> records;
@@ -61,12 +69,14 @@ public final class FileSystemTraversalService {
 
         private CrawlVisitor(
                 String machineId,
+                String machineName,
                 boolean includeHidden,
                 Set<Path> configuredRoots,
                 List<FileRecord> records,
                 TraversalStats stats
         ) {
             this.machineId = machineId;
+            this.machineName = machineName;
             this.includeHidden = includeHidden;
             this.configuredRoots = configuredRoots;
             this.records = records;
@@ -114,6 +124,7 @@ public final class FileSystemTraversalService {
             stats.inaccessiblePaths++;
             records.add(new FileRecord(
                     machineId,
+                    machineName,
                     file.toAbsolutePath().toString(),
                     file.getFileName() == null ? file.toString() : file.getFileName().toString(),
                     false,
@@ -128,6 +139,7 @@ public final class FileSystemTraversalService {
         private FileRecord toRecord(Path path, BasicFileAttributes attrs, boolean directory, String accessStatus, boolean hidden) {
             return new FileRecord(
                     machineId,
+                    machineName,
                     path.toAbsolutePath().toString(),
                     path.getFileName() == null ? path.toString() : path.getFileName().toString(),
                     directory,

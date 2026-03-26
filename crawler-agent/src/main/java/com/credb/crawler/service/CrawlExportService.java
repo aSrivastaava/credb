@@ -34,6 +34,7 @@ public final class CrawlExportService {
             FileRecord record = summary.records().get(index);
             builder.append("    {\n");
             appendString(builder, "machineId", record.machineId(), true, 6);
+            appendString(builder, "machineName", record.machineName(), true, 6);
             appendString(builder, "fullPath", record.fullPath(), true, 6);
             appendString(builder, "fileName", record.fileName(), true, 6);
             appendBoolean(builder, "directory", record.directory(), true, 6);

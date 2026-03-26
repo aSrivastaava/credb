@@ -1,12 +1,17 @@
 package com.credb.crawler.config;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 
 public record CrawlerConfig(
         String machineId,
+        String machineName,
         String scanRoots,
         int workerThreads,
         boolean verbose,
@@ -15,7 +20,8 @@ public record CrawlerConfig(
         String outputFile
 ) {
     public static CrawlerConfig fromEnvironment(String[] args) {
-        String machineId = getEnv("CREDB_CRAWLER_MACHINE_ID", "local-dev-machine");
+        String machineName = resolveMachineName();
+        String machineId = getEnv("CREDB_CRAWLER_MACHINE_ID", resolveMachineId(machineName));
         String scanRoots = getEnv("CREDB_CRAWLER_SCAN_ROOTS", "D:\\");
         int workerThreads = Integer.parseInt(getEnv("CREDB_CRAWLER_WORKER_THREADS", "4"));
         boolean verbose = false;
@@ -64,7 +70,7 @@ public record CrawlerConfig(
             }
         }
 
-        return new CrawlerConfig(machineId, scanRoots, workerThreads, verbose, outputLimit, includeHidden, outputFile);
+        return new CrawlerConfig(machineId, machineName, scanRoots, workerThreads, verbose, outputLimit, includeHidden, outputFile);
     }
 
     public List<Path> resolvedScanRoots() {
@@ -78,5 +84,49 @@ public record CrawlerConfig(
     private static String getEnv(String key, String fallback) {
         String value = System.getenv(key);
         return value == null || value.isBlank() ? fallback : value;
+    }
+
+    private static String resolveMachineName() {
+        String computerName = System.getenv("COMPUTERNAME");
+        if (computerName != null && !computerName.isBlank()) {
+            return computerName;
+        }
+
+        try {
+            return InetAddress.getLocalHost().getHostName();
+        } catch (Exception exception) {
+            return "unknown-machine";
+        }
+    }
+
+    private static String resolveMachineId(String machineName) {
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = interfaces.nextElement();
+                byte[] mac = networkInterface.getHardwareAddress();
+
+                if (mac == null || mac.length == 0 || networkInterface.isLoopback() || !networkInterface.isUp()) {
+                    continue;
+                }
+
+                return formatMacAddress(mac);
+            }
+        } catch (SocketException exception) {
+            return machineName;
+        }
+
+        return machineName;
+    }
+
+    private static String formatMacAddress(byte[] mac) {
+        StringBuilder builder = new StringBuilder();
+        for (int index = 0; index < mac.length; index++) {
+            builder.append(String.format("%02X", mac[index]));
+            if (index < mac.length - 1) {
+                builder.append("-");
+            }
+        }
+        return builder.toString();
     }
 }

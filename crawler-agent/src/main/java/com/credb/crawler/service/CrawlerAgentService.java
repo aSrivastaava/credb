@@ -21,6 +21,7 @@ public final class CrawlerAgentService {
     public void start() {
         System.out.println("CredB crawler agent initialized.");
         System.out.println("Machine ID: " + config.machineId());
+        System.out.println("Machine name: " + config.machineName());
         System.out.println("Starting points: " + config.resolvedScanRoots());
         System.out.println("Worker threads: " + config.workerThreads());
         System.out.println("Verbose mode: " + config.verbose());
