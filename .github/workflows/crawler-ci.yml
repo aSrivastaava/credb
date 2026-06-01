@@ -1,0 +1,43 @@
+name: Crawler CI
+
+on:
+  push:
+    branches:
+      - main
+      - migrate/python-cloudflare
+    paths:
+      - crawler-agent/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - crawler-agent/**
+
+jobs:
+  lint-and-test:
+    name: Lint & Test (Python)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: crawler-agent
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: crawler-agent/requirements-dev.txt
+
+      - name: Install dev dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Lint with ruff
+        run: ruff check .
+
+      - name: Run tests
+        run: pytest --cov=crawler_agent --cov-report=term-missing -q

@@ -59,14 +59,16 @@ Status: `pending`
 
 Status: `pending`
 
-- [ ] LM Studio integration
+- [ ] Cloudflare Workers AI integration
 - [ ] semantic query flow
+- [ ] embedding endpoint (`@cf/baai/bge-small-en-v1.5`)
+- [ ] summarisation endpoint (`@cf/meta/llama-3-8b-instruct`)
 
 ## Phase 7
 
 Status: `pending`
 
-- [ ] embeddings and vector search
+- [ ] vector search with Cloudflare Vectorize
 - [ ] semantic ranking improvements
 
 ## Phase 8

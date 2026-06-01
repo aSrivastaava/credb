@@ -9,29 +9,37 @@ This module will host the CredB Nexus crawler agent.
 - crawl progress reporting
 - batched submission to backend services
 
-## Planned Stack
+## Stack
 
-- Java
-- bounded concurrency with ExecutorService
+- Python 3.11+
+- stdlib only (`os`, `pathlib`, `datetime`) — no external runtime dependencies
+- bounded concurrency via `concurrent.futures` (planned for Phase 3)
 
-## Current Module Layout
+## Module Layout
 
-- `pom.xml`
-- `src/main/java/com/credb/crawler/`
-- `src/main/java/com/credb/crawler/config/`
-- `src/main/java/com/credb/crawler/model/`
-- `src/main/java/com/credb/crawler/service/`
+```
+crawler-agent/
+├── main.py
+├── pyproject.toml
+├── requirements-dev.txt
+└── crawler_agent/
+    ├── config.py        # env + CLI config
+    ├── models.py        # FileRecord, CrawlJob, CrawlSummary
+    └── services/
+        ├── traversal.py # filesystem walk logic
+        └── crawler.py   # orchestrator + output
+```
 
 ## Current Status
 
 The crawler module now has:
 
-- a Maven project file
-- an application entry point
+- a `pyproject.toml` project file
+- an application entry point (`main.py`)
 - an environment-backed config model
-- a placeholder crawl job model
+- dataclass models for FileRecord, CrawlJob, CrawlSummary
 - a service entry point for traversal logic
-- recursive filesystem traversal using Java NIO
+- recursive filesystem traversal using `os.walk` + `pathlib`
 - basic file and directory metadata capture
 - crawl summary output to the console
 
