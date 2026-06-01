@@ -9,6 +9,17 @@ Thumbs.db
 .env.*
 !.env.example
 
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+.venv/
+
 # Java
 target/
 build/
