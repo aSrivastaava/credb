@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: credb_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: credb
+      POSTGRES_USER: credb
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - credb_postgres:/var/lib/postgresql/data
+
+  web:
+    image: nginx:alpine
+    container_name: credb_web
+    restart: unless-stopped
+    ports:
+      - "8090:80"
+    volumes:
+      - ./placeholder:/usr/share/nginx/html:ro
+
+volumes:
+  credb_postgres:
